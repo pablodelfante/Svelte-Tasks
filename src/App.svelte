@@ -46,7 +46,6 @@
         // set data
         const response = await document.update(newTask);
         isUpdate = false;
-        console.log('tocaste update')
     };
     const deleteTask = async id => {
         if (confirm("seguro deseas borrar la tarea?")) {
@@ -58,7 +57,13 @@
     const updateTask = async taskTarget => {
         task.title = taskTarget.title;
         task.task = taskTarget.task;
+        task.id = taskTarget.id;
         isUpdate = true;
+    };
+    const cancel = () => {
+        task.title = '';
+        task.task = '';
+        isUpdate = false;
     };
     function handleClick() {
         addTask(task);
@@ -92,14 +97,12 @@
             />
         </div>
 
-
         {#if !isUpdate}
-        <Btn handle={handleClick} />
+            <Btn handle={handleClick} />
         {:else}
-        <Btn handle={handleClick} text='UPDATE'/>
+            <Btn handle={handleClick} text="UPDATE" />
+            <Btn handle={cancel} text="CANCEL" />
         {/if}
-        
-        
     </form>
     <!-- --------- -->
 
