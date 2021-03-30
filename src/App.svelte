@@ -1,26 +1,56 @@
 <script>
-    let title = "",
-        task = "";
+    import Btn from "./Btn.svelte";
+    import db from "./firebase";
+
+    let task = {
+        title: "",
+        task: "",
+    };
     let tasks = [];
 
     $: {
         console.log(tasks);
     }
-	function clearForm() {
-		title = "",
-        task = "";
-	}
-    function addTask(newTask) {
-        tasks = [...tasks, newTask];
-		clearForm();
+
+    // getDatos from firestore
+    const colection = db.collection("tasks");
+    const observer = colection.onSnapshot(
+        querySnapshot => {
+            querySnapshot.forEach(doc => {
+                const newDoc = [{ ...doc.data(), id: doc.id }];
+                tasks = [...tasks, ...newDoc];
+            });
+        },
+        err => {
+            console.log(`error: ${err}`);
+        }
+    );
+    // ---------------
+
+    function clearForm() {
+        task = {
+            title: "",
+            task: "",
+        };
     }
+    const addTask = newTask => {
+        tasks = [...tasks, newTask];
+        clearForm();
+    };
+    const deleteTask = task => {
+        console.log(task);
+    };
+    const updateTask = task => {
+        console.log(task);
+    };
     function handleClick() {
-        addTask({ title, task });
+        addTask(task);
     }
 </script>
 
-<main class="container col-sm-3">
-    <form class='p-4 bg-light'>
+<main class="container col-sm-3 my-5">
+    <form class="p-4 bg-light">
+        <fieldset class="font-weight-bold mb-3">Asignador de tareas</fieldset>
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Title</label>
             <input
@@ -30,7 +60,7 @@
                 aria-describedby="emailHelp"
                 placeholder="titulo de la tarea"
                 required
-                bind:value={title}
+                bind:value={task.title}
             />
         </div>
         <div class="mb-3">
@@ -41,15 +71,40 @@
                 id="exampleInputPassword1"
                 placeholder="ingresa tu que hacer"
                 required
-                bind:value={task}
+                bind:value={task.task}
             />
         </div>
-        <button
-            type="submit"
-            class="btn btn-primary"
-            on:click|preventDefault={handleClick}>Submit</button
-        >
+        <Btn handle={handleClick} />
     </form>
+    <!-- --------- -->
+
+    <div class="mt-5">
+        {#each tasks as task}
+            <div class="card border-secondary mb-3" style="max-width: 18rem;">
+                <div class="card-header">{task.title}</div>
+                <div class="card-body text-secondary">
+                    <h5 class="card-title">{task.title}</h5>
+                    <p class="card-text">{task.task}</p>
+                </div>
+                <div class="card-footer">
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        on:click|preventDefault={() => {
+                            updateTask(task);
+                        }}>EDITAR</button
+                    >
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        on:click|preventDefault={() => {
+                            deleteTask(task);
+                        }}>ELIMINAR</button
+                    >
+                </div>
+            </div>
+        {/each}
+    </div>
 </main>
 
 <style>
