@@ -70,8 +70,8 @@
     }
 </script>
 
-<main class="container col-sm-3 my-5">
-    <form class="p-4 bg-light">
+<main class="container my-5">
+        <form class="custom-shadow col-sm-3 m-auto p-4 shadow-sm bg-light">
         <fieldset class="font-weight-bold mb-3">Asignador de tareas</fieldset>
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Title</label>
@@ -106,9 +106,9 @@
     </form>
     <!-- --------- -->
 
-    <div class="mt-5">
+    <div class="row mt-5">
         {#each tasks as task}
-            <div class="card border-secondary mb-3" style="max-width: 18rem;">
+            <div class="custom-shadow card border-secondary m-3 shadow-sm" style="max-width: 18rem;">
                 <div class="card-header">{task.title}</div>
                 <div class="card-body text-secondary">
                     <h5 class="card-title">{task.title}</h5>
