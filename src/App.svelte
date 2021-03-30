@@ -1,15 +1,16 @@
 <script>
     import Btn from "./Btn.svelte";
     import db from "./firebase";
+    import Modal from "./modal.svelte";
 
     let task = {
         title: "",
         task: "",
     };
     let tasks = [];
+    let isUpdate = false;
 
     $: {
-        console.log(tasks);
     }
 
     // getDatos from firestore
@@ -27,21 +28,37 @@
     );
     // ---------------
 
-    function clearForm() {
+    const clearFormAndTasks = () => {
         task = {
             title: "",
             task: "",
         };
-    }
-    const addTask = newTask => {
-        tasks = [...tasks, newTask];
-        clearForm();
+        tasks = [];
     };
-    const deleteTask = task => {
-        console.log(task);
+    const addTask = async newTask => {
+        clearFormAndTasks();
+        if (!isUpdate) {
+            const res = await db.collection("tasks").add(newTask);
+            return res.id;
+        }
+        // get document
+        const document = db.collection("tasks").doc(newTask.id);
+        // set data
+        const response = await document.update(newTask);
+        isUpdate = false;
+        console.log('tocaste update')
     };
-    const updateTask = task => {
-        console.log(task);
+    const deleteTask = async id => {
+        if (confirm("seguro deseas borrar la tarea?")) {
+            clearFormAndTasks();
+            const res = await db.collection("tasks").doc(id).delete();
+            console.log(res);
+        }
+    };
+    const updateTask = async taskTarget => {
+        task.title = taskTarget.title;
+        task.task = taskTarget.task;
+        isUpdate = true;
     };
     function handleClick() {
         addTask(task);
@@ -74,7 +91,15 @@
                 bind:value={task.task}
             />
         </div>
+
+
+        {#if !isUpdate}
         <Btn handle={handleClick} />
+        {:else}
+        <Btn handle={handleClick} text='UPDATE'/>
+        {/if}
+        
+        
     </form>
     <!-- --------- -->
 
@@ -98,7 +123,7 @@
                         type="submit"
                         class="btn btn-primary"
                         on:click|preventDefault={() => {
-                            deleteTask(task);
+                            deleteTask(task.id);
                         }}>ELIMINAR</button
                     >
                 </div>
