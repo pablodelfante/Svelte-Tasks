@@ -1,7 +1,10 @@
 <script>
-    export let handle;
+    export let handle = nul;
 
     
+    const hideModal = ()=>{
+        document.querySelector('.modal-backdrop').classList.remove('modal-backdrop');
+    }
 </script>
 
 <div
@@ -32,19 +35,17 @@
                     class="btn btn-secondary"
                     data-dismiss="modal">Cerrar</button
                 >
-                <button
-                    type="button"
-                    class="btn btn-primary"
-                    onclick={handle()}>Confirmar</button
-                >
+                <button type="button" class="btn btn-primary" on:click={hideModal} on:click={handle()} >Confirmar</button>
             </div>
         </div>
     </div>
 </div>
 
-
-
-
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal">
-    Launch demo modal
-  </button>
+<button
+    type="button"
+    class="btn btn-primary"
+    data-toggle="modal"
+    data-target="#modal"
+>
+    ELIMINAR2
+</button>

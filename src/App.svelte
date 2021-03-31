@@ -1,7 +1,7 @@
 <script>
     import Btn from "./Btn.svelte";
     import db from "./firebase";
-    import Modal from "./modal.svelte";
+    import Modal from "./components/modal.svelte";
 
     let task = {
         title: "",
@@ -48,11 +48,11 @@
         isUpdate = false;
     };
     const deleteTask = async id => {
-        if (confirm("seguro deseas borrar la tarea?")) {
+        // if (confirm("seguro deseas borrar la tarea?")) {
             clearFormAndTasks();
             const res = await db.collection("tasks").doc(id).delete();
             console.log(res);
-        }
+        // }
     };
     const updateTask = async taskTarget => {
         task.title = taskTarget.title;
@@ -122,13 +122,16 @@
                             updateTask(task);
                         }}>EDITAR</button
                     >
-                    <button
+                    <!-- <button
                         type="submit"
                         class="btn btn-primary"
                         on:click|preventDefault={() => {
                             deleteTask(task.id);
                         }}>ELIMINAR</button
-                    >
+                    > -->
+                    <Modal handle={() => {
+                        deleteTask(task.id);
+                    }}/>
                 </div>
             </div>
         {/each}
