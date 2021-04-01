@@ -1,7 +1,7 @@
 <script>
     import Btn from "./Btn.svelte";
     import db from "./../firebase.js";
-    import Modal from "./Modal.svelte";
+    import Modal from "./modal.svelte";
 
     let task = {
         title: "",
