@@ -46,11 +46,11 @@
     </header>
 
     <main>
-        <Route path="notes">
+        <Route path="notes" primary = {false}>
             <Notes />
         </Route>
 
-        <Route path="/">
+        <Route path="/" primary = {false}>
             <Cover></Cover>
         </Route>
     </main>

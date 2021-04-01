@@ -1,8 +1,7 @@
 <script>
     import Btn from "./Btn.svelte";
     import db from "../firebase";
-    import Modal from "./modal.svelte";
-    
+    import Modal from "./Modal.svelte";
 
     let task = {
         title: "",
@@ -10,6 +9,8 @@
     };
     let tasks = [];
     let isUpdate = false;
+
+    let idForModal = null;
 
     $: {
     }
@@ -49,11 +50,8 @@
         isUpdate = false;
     };
     const deleteTask = async id => {
-        // if (confirm("seguro deseas borrar la tarea?")) {
-            clearFormAndTasks();
-            const res = await db.collection("tasks").doc(id).delete();
-            console.log(res);
-        // }
+        clearFormAndTasks();
+        const res = await db.collection("tasks").doc(id).delete();
     };
     const updateTask = async taskTarget => {
         task.title = taskTarget.title;
@@ -62,17 +60,22 @@
         isUpdate = true;
     };
     const cancel = () => {
-        task.title = '';
-        task.task = '';
+        task.title = "";
+        task.task = "";
         isUpdate = false;
     };
     function handleClick() {
         addTask(task);
     }
+
+    
+    const passIdForModal = (id)=>{
+        idForModal = id;
+    }
 </script>
 
 <main class="container my-5">
-        <form class="custom-shadow col-sm-3 m-auto p-4 shadow-sm bg-light">
+    <form class="custom-shadow col-sm-3 m-auto p-4 shadow-sm bg-light">
         <fieldset class="font-weight-bold mb-3">Asignador de tareas</fieldset>
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Title</label>
@@ -109,7 +112,10 @@
 
     <div class="row mt-5">
         {#each tasks as task}
-            <div class="custom-shadow card border-secondary m-3 shadow-sm" style="max-width: 18rem;">
+            <div
+                class="custom-shadow card border-secondary m-3 shadow-sm"
+                style="max-width: 18rem;"
+            >
                 <div class="card-header">{task.title}</div>
                 <div class="card-body text-secondary">
                     <h5 class="card-title">{task.title}</h5>
@@ -130,9 +136,19 @@
                             deleteTask(task.id);
                         }}>ELIMINAR</button
                     > -->
-                    <Modal handle={() => {
-                        deleteTask(task.id);
-                    }}/>
+
+                    <Modal handle={deleteTask} reciveId={idForModal} />
+
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-toggle="modal"
+                        data-target="#modal"
+                        on:click|preventDefault={passIdForModal(task.id)}
+                    >
+                        ELIMINAR2
+                    </button>
+
                 </div>
             </div>
         {/each}
