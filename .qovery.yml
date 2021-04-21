@@ -1,0 +1,11 @@
+---
+application:
+  name: "svelte-tasks-app"
+  project: "prueba-svelte"
+  organization: "QoveryCommunity"
+routers:
+- name: "main-svelte-tasks-app"
+  routes:
+  - application_name: "svelte-tasks-app"
+    paths:
+    - "/*"
