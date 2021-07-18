@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA</title>
+
+    <!-- icon for apple home -->
+    <link rel="apple-touch-icon" href="/img/icons/192.png">
+
+    <!-- theme color xra barra del navegador -->
+    <meta name="theme-color" content="#C4FFF9" />
+
+    <!-- css -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- asignar manifest json -->
+    <link rel="manifest" href="./manifest.json">
+
+    <!-- service worker register -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./serviceWorker.js')
+            //.then(reg => console.log('sw register', reg))
+            //.catch(err => console.log('sw error', err))
+        }
+    </script>
+
+
+    <!-- ============== -->
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-firestore.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyD0yBvWHwr_NO5-CRaZK4jPk2x_dMVd7TM",
+            authDomain: "first-pwa-5b5e2.firebaseapp.com",
+            projectId: "first-pwa-5b5e2",
+            storageBucket: "first-pwa-5b5e2.appspot.com",
+            messagingSenderId: "482286724458",
+            appId: "1:482286724458:web:543e9f2ed0ce49f5ab3113"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+    </script>
+    <!-- ============== -->
+
+
+    <!-- mi script general -->
+    <script type="module" src="./js/index.js"></script>
+
+</head>
+
+<body>
+
+    <main class="container py-5">
+    HOME PWA
+    <a href="/pepe.html">go pepe</a>
+
+    <div>
+        <hr>
+        <form action="#">
+            <label for="fname">Name:</label><br>
+            <input type="text" id="fname" name="name" value=""><br>
+
+            <label for="fname">Details:</label><br>
+            <input type="text" id="fname" name="detail" value=""><br>
+
+
+            <input type="submit" class="btn btn-outline-primary" value="ENVIAR">
+        </form>
+    </div>
+    </main>
+</body>
+
+</html>
