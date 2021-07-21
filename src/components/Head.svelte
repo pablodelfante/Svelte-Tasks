@@ -8,7 +8,7 @@
     <meta name="theme-color" content="#C4FFF9" />
 
     <!-- css bootstrap -->
-    <link rel="stylesheet" href="./bootstrap.min.css" />
+    <!-- <link rel="stylesheet" href="./bootstrap.min.css" /> -->
 
     <!-- asignar manifest json -->
     <link rel="manifest" href="./manifest.json" />

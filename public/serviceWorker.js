@@ -32,6 +32,26 @@ const limitNumCache = (cacheName, num) => {
         })
     })
 }
+
+// recursive funciton for delete cache
+const limitCacheSizeV2 = (name, limitSize) => {
+    caches.open(name).then((cache) => {
+        cache.keys().then((keys) => {
+            
+            // limit cache size
+            if ('storage' in navigator && 'estimate' in navigator.storage) {
+                navigator.storage.estimate().then((estimate)=>{
+                    const currentSize = estimate.usage / 1000000;
+                    if (currentSize > limitSize) {
+                        cache.delete(keys[0]).then(()=>limitCacheSizeV2(name, limitSize));
+                    }
+                })
+            }
+            //================
+
+        })
+    })
+}
 // ===============================
 
 //install process
@@ -46,12 +66,12 @@ self.addEventListener('install', e => {
 
 //activate 
 self.addEventListener('activate', e => {
-
+    limitCacheSizeV2('dynamic-cache', '300');
 })
 
 
 // fetching data (esto estaba funcionando bien)
-self.addEventListener('fetch', e => {
+/* self.addEventListener('fetch', e => {
     if (e.request.url.indexOf('firestore.googleapis.com') === -1) {
         e.respondWith(
             caches.match(e.request).then(staticRes => {
@@ -66,19 +86,25 @@ self.addEventListener('fetch', e => {
         )
     }
 
-})
+}) */
 
 
-// ESTRATEGIA TOMADA DE WEB
-/* self.addEventListener('fetch', function (event) {
+// ESTRATEGIA V2
+self.addEventListener('fetch', function (event) {
     event.respondWith(
-        caches.open(dynamicCache).then(function (cache) {
-            return cache.match(event.request).then(function (cacheResponse) {
-                fetch(event.request).then(function(networkResponse) {
-                        cache.put(event.request, networkResponse)
-                    })
-                return cacheResponse || networkResponse
-            }).catch(() => caches.match('/fallback.html'))
-        })
+
+        caches.match(event.request).then(function (cacheResponse) {
+
+            return caches.open(dynamicCache).then(function (cache) {
+
+                fetch(event.request).then(function (networkResponse) {
+                    cache.put(event.request, networkResponse.clone())
+                }).catch(() => console.log('>>> network no found for get new cache'))
+
+                limitCacheSizeV2('dynamic-cache', '300');
+                return cacheResponse || networkResponse;
+            })
+
+        }).catch(() => caches.match('/fallback.html'))
     )
-}); */
+});
