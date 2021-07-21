@@ -50,7 +50,7 @@ self.addEventListener('activate', e => {
 })
 
 
-// fetching data
+// fetching data (esto estaba funcionando bien)
 self.addEventListener('fetch', e => {
     if (e.request.url.indexOf('firestore.googleapis.com') === -1) {
         e.respondWith(
@@ -72,13 +72,13 @@ self.addEventListener('fetch', e => {
 // ESTRATEGIA TOMADA DE WEB
 /* self.addEventListener('fetch', function (event) {
     event.respondWith(
-        caches.open(cacheName).then(function(cache) {
-                cache.match(event.request).then( function(cacheResponse) {
-                        fetch(event.request).then(function(networkResponse) {
-                                cache.put(event.request, networkResponse)
-                            })
-                        return cacheResponse || networkResponse
+        caches.open(dynamicCache).then(function (cache) {
+            return cache.match(event.request).then(function (cacheResponse) {
+                fetch(event.request).then(function(networkResponse) {
+                        cache.put(event.request, networkResponse)
                     })
-            })
+                return cacheResponse || networkResponse
+            }).catch(() => caches.match('/fallback.html'))
+        })
     )
 }); */

@@ -1,6 +1,8 @@
 <script>
     import db from "./../helpers/db";
     import { fade } from "svelte/transition";
+    import Header from "./Header.svelte";
+    import Button from "./Button.svelte";
 
     let plants = [];
     let name = "";
@@ -9,14 +11,14 @@
     let addButton = true;
 
     // read data from firestore and get data of changes
-    db.collection("pwa-plants").onSnapshot(snapshot => {
+   /*  db.collection("pwa-plants").onSnapshot(snapshot => {
         plants = [];
         snapshot.forEach(doc => {
             const newPlant = doc.data();
             newPlant._id = doc.id;
             plants = [...plants, newPlant];
         });
-    });
+    }); */
 
     // write data on firestore
     const sendData = e => {
@@ -65,10 +67,7 @@
     };
 </script>
 
-<h1>Garden app, manage yours plants!</h1>
-<em>This is an app for understand the pwa concept, theory you can use this app offline</em>
-<p>!Some extensions could cause error</p>
-
+<Header />
 
 <div class="my-5">
     <h3>Insert and update plants</h3>
@@ -77,28 +76,20 @@
         <input type="text" id="fname" name="name" bind:value={name} /><br />
 
         <label for="fname">Details:</label><br />
-        <!-- <input type="text" id="fname" name="detail"  /><br
-        /> -->
-        <textarea bind:value={details} class="form-control w-auto" id="exampleTextarea" rows="3"></textarea>
+        <textarea
+            bind:value={details}
+            class="form-control w-auto"
+            id="exampleTextarea"
+            rows="3"
+        />
 
         {#if addButton}
-            <input
-                on:click|preventDefault={sendData}
-                type="submit"
-                class="btn btn-outline-primary my-3"
-                value="ADD PLANT"
-            />
+            <Button handle={sendData} text="ADD PLANT" />
         {:else}
-            <input
-                on:click|preventDefault={updateData}
-                type="submit"
-                class="btn btn-outline-primary my-3"
-                value="UPDATE PLANT"
-            />
+            <Button handle={updateData} text="UPDATE PLANT" />
         {/if}
     </form>
 </div>
-
 
 <div class="table-responsive">
     <table class="table table-hover">
@@ -148,4 +139,3 @@
         </tbody>
     </table>
 </div>
-
