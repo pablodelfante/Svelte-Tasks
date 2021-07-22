@@ -37,13 +37,13 @@ const limitNumCache = (cacheName, num) => {
 const limitCacheSizeV2 = (name, limitSize) => {
     caches.open(name).then((cache) => {
         cache.keys().then((keys) => {
-            
+
             // limit cache size
             if ('storage' in navigator && 'estimate' in navigator.storage) {
-                navigator.storage.estimate().then((estimate)=>{
+                navigator.storage.estimate().then((estimate) => {
                     const currentSize = estimate.usage / 1000000;
                     if (currentSize > limitSize) {
-                        cache.delete(keys[0]).then(()=>limitCacheSizeV2(name, limitSize));
+                        cache.delete(keys[0]).then(() => limitCacheSizeV2(name, limitSize));
                     }
                 })
             }
@@ -91,20 +91,26 @@ self.addEventListener('activate', e => {
 
 // ESTRATEGIA V2
 self.addEventListener('fetch', function (event) {
-    event.respondWith(
+    // if (event.request.url.indexOf('firestore.googleapis.com') === -1) {
+        event.respondWith(
 
-        caches.match(event.request).then(function (cacheResponse) {
+            caches.match(event.request).then(function (cacheResponse) {
 
-            return caches.open(dynamicCache).then(function (cache) {
+                return caches.open(dynamicCache).then(function (cache) {
 
-                fetch(event.request).then(function (networkResponse) {
-                    cache.put(event.request, networkResponse.clone())
-                }).catch(() => console.log('>>> network no found for get new cache'))
+                    return fetch(event.request).then(function (networkResponse) {
+                        if (event.request.method != 'POST') {
+                            cache.put(event.request, networkResponse.clone());
+                        }
+                        return cacheResponse || networkResponse;
+                    }).catch(() => {
+                        console.log('>>> network no found, getting data alone from cache')
+                        return cacheResponse;
+                    })
 
-                limitCacheSizeV2('dynamic-cache', '300');
-                return cacheResponse || networkResponse;
-            })
+                })
 
-        }).catch(() => caches.match('/fallback.html'))
-    )
+            }).catch(() => caches.match('/fallback.html'))
+        )
+    // }
 });
