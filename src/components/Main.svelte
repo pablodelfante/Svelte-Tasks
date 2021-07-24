@@ -11,14 +11,14 @@
     let addButton = true;
 
     // read data from firestore and get data of changes
-  /*   db.collection("pwa-plants").onSnapshot(snapshot => {
+    db.collection("pwa-plants").onSnapshot(snapshot => {
         plants = [];
         snapshot.forEach(doc => {
             const newPlant = doc.data();
             newPlant._id = doc.id;
             plants = [...plants, newPlant];
         });
-    }); */
+    });
 
     // write data on firestore
     const sendData = e => {

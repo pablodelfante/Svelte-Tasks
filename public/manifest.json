@@ -42,7 +42,7 @@
     "start_url": "./index.html",
     "background_color": "#07BEB8",
     "display": "standalone",
-    "theme_color": "#C4FFF9",
-    "description": "Weather forecast information"
+    "theme_color": "#07BEB8",
+    "description": "Garden app test"
     
 }

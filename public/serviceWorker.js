@@ -33,7 +33,7 @@ const limitNumCache = (cacheName, num) => {
     })
 }
 
-// recursive funciton for delete cache
+// limit cache cross size
 const limitCacheSizeV2 = (name, limitSize) => {
     caches.open(name).then((cache) => {
         cache.keys().then((keys) => {
@@ -89,28 +89,37 @@ self.addEventListener('activate', e => {
 }) */
 
 
-// ESTRATEGIA V2
+
+// Si hay una versión en caché disponible, se usa, pero obtenga una actualización para la próxima vez.
 self.addEventListener('fetch', function (event) {
-    // if (event.request.url.indexOf('firestore.googleapis.com') === -1) {
+    if ((event.request.url.indexOf('firestore.googleapis.com') === -1) && (event.request.method != 'POST')) {
         event.respondWith(
-
-            caches.match(event.request).then(function (cacheResponse) {
-
-                return caches.open(dynamicCache).then(function (cache) {
-
-                    return fetch(event.request).then(function (networkResponse) {
-                        if (event.request.method != 'POST') {
-                            cache.put(event.request, networkResponse.clone());
-                        }
-                        return cacheResponse || networkResponse;
-                    }).catch(() => {
-                        console.log('>>> network no found, getting data alone from cache')
-                        return cacheResponse;
-                    })
-
-                })
-
-            }).catch(() => caches.match('/fallback.html'))
-        )
-    // }
+            caches.open(dynamicCache).then(function (cache) {
+                return cache.match(event.request).then(function (response) {
+                    var fetchPromise = fetch(event.request).then(function (networkResponse) {
+                        cache.put(event.request, networkResponse.clone());
+                        return networkResponse;
+                    }).catch(() => console.log('err to fetch new data'));
+                    return response || fetchPromise;
+                }).catch(() => caches.match('/fallback.html'))
+            })
+        );
+    }
 });
+
+
+
+/* Ideal para: actualizaciones no urgentes, especialmente
+aquellas que ocurren con tanta regularidad que un mensaje
+push por actualización sería demasiado frecuente para los
+usuarios, como líneas de tiempo sociales o artículos de noticias. */
+
+/* self.addEventListener('sync', function (event) {
+    if (event.id == 'update-leaderboard') {
+      event.waitUntil(
+        caches.open('mygame-dynamic').then(function (cache) {
+          return cache.add('/leaderboard.json');
+        }),
+      );
+    }
+  }); */

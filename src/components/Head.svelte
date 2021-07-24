@@ -5,7 +5,7 @@
     <link rel="apple-touch-icon" href="/img/icons/192.png" />
 
     <!-- theme color xra barra del navegador -->
-    <meta name="theme-color" content="#C4FFF9" />
+    <meta name="theme-color" content="#07BEB8" />
 
     <!-- css bootstrap -->
     <!-- <link rel="stylesheet" href="./bootstrap.min.css" /> -->
