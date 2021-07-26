@@ -23,7 +23,8 @@
         font-family: "Fredericka the Great", cursive;
     }
 
-    input {
+    input, textarea {
         border-radius: 255px 25px 225px 25px/25px 225px 25px 255px;
+        /* border-radius: 255px 25px 225px 25px/25px 225px 25px 255px; */
     }
 </style>

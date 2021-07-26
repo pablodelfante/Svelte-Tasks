@@ -4,14 +4,37 @@
 
     import Button from "./Button.svelte";
 
-    let plants = [];
+    // let plants = [];
     let name = "";
     let details = "";
     let idToUpdate = "";
     let addButton = true;
 
+    const plants = [
+    {
+        "details": "La menta piperita es una planta medicinal digestiva, analgésica y antiséptica",
+        "name": "Menta",
+        "_id": "6B15n6sn78fckithvoPI"
+    },
+    {
+        "name": "Caléndula",
+        "details": "La caléndula es una de las hierbas medicinales más populares y versátiles. Se ha dicho tradicionalmente que levanta el ánimo.",
+        "_id": "DP6YyhnevT0y7pB5XwPE"
+    },
+    {
+        "name": "Áloe vera",
+        "details": "Aloe vera es una planta medicinal refrescante y cicatrizante",
+        "_id": "F2kC0pN6jlALvbNm88aR"
+    },
+    {
+        "name": "Manzanilla",
+        "details": "La manzanilla es nativa de Europa, Oriente Próximo y la India y se utiliza para desórdenes digestivos o nerviosos",
+        "_id": "busc7m4r7emqlf1WhZyg"
+    }
+]
+
     // read data from firestore and get data of changes
-    /* db.collection("pwa-plants").onSnapshot(snapshot => {
+ /*    db.collection("pwa-plants").onSnapshot(snapshot => {
         plants = [];
         snapshot.forEach(doc => {
             const newPlant = doc.data();
@@ -100,49 +123,66 @@
     </form>
 </div>
 
-<table class="font-light">
-    <thead>
-        <tr>
-            <th class="font-medium">Name</th>
-            <th class="font-medium">Description</th>
-            <th class="font-medium">Update</th>
-            <th class="font-medium">Delete</th>
-        </tr>
-    </thead>
-    <tbody>
-        {#each plants as plant}
-            <tr class="">
-                <td data-id={plant._id} transition:fade>
-                    {plant.name}
-                </td>
-                <td>{plant.details}</td>
-                <td>
-                    <svg
-                        on:click={() => getDataForUpdate(plant)}
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="24px"
-                        viewBox="0 0 24 24"
-                        width="24px"
-                        fill="#000000"
-                        ><path d="M0 0h24v24H0z" fill="none" /><path
-                            d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
-                        /></svg
-                    ></td
+
+
+<!-- component -->
+<div class="shadow overflow-x-auto rounded border-b border-gray-200">
+    <table class="min-w-full bg-white">
+        <thead class="bg-gray-800 text-white">
+            <tr>
+                <th
+                    class="text-left py-3 px-4 uppercase font-semibold text-sm"
+                    >Name</th
                 >
-                <td>
-                    <svg
-                        on:click={() => deleteData(plant._id)}
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="24px"
-                        viewBox="0 0 24 24"
-                        width="24px"
-                        fill="#000000"
-                        ><path d="M0 0h24v24H0V0z" fill="none" /><path
-                            d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"
-                        /></svg
-                    ></td
+                <th
+                    class="text-left py-3 px-4 uppercase font-semibold text-sm"
+                    >Description</th
+                >
+                <th class="text-left py-3 px-4 uppercase font-semibold text-sm"
+                    >Update</th
+                >
+                <th class="text-left py-3 px-4 uppercase font-semibold text-sm"
+                    >Delete</th
                 >
             </tr>
-        {/each}
-    </tbody>
-</table>
+        </thead>
+        <tbody class="text-gray-700">
+            {#each plants as plant}
+                <tr class="bg-gray-100">
+                    <td
+                        data-id={plant._id}
+                        transition:fade
+                        class="text-left py-3 px-4"
+                    >
+                        {plant.name}
+                    </td>
+                    <td class="text-left py-3 px-4">{plant.details}</td>
+                    <td class="text-left py-3 px-4">
+                        <svg
+                            on:click={() => getDataForUpdate(plant)}
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="24px"
+                            viewBox="0 0 24 24"
+                            width="24px"
+                            fill="#000000"
+                            ><path d="M0 0h24v24H0z" fill="none" /><path
+                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+                            /></svg>
+                    </td>
+                    <td class="text-left py-3 px-4">
+                        <svg
+                            on:click={() => deleteData(plant._id)}
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="24px"
+                            viewBox="0 0 24 24"
+                            width="24px"
+                            fill="#000000"
+                            ><path d="M0 0h24v24H0V0z" fill="none" /><path
+                                d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"
+                            /></svg>
+                    </td>
+                </tr>
+            {/each}
+        </tbody>
+    </table>
+</div>
