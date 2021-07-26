@@ -6,7 +6,13 @@
     import "./global.css";
 </script>
 
-<Head/>
+<Head />
 <Layout>
     <Main />
 </Layout>
+
+<style global>
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+</style>
