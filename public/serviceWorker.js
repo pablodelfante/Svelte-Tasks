@@ -91,7 +91,7 @@ self.addEventListener('activate', e => {
 
 
 // Si hay una versión en caché disponible, se usa, pero obtenga una actualización para la próxima vez.
-self.addEventListener('fetch', function (event) {
+/* self.addEventListener('fetch', function (event) {
     if ((event.request.url.indexOf('firestore.googleapis.com') === -1) && (event.request.method != 'POST')) {
         event.respondWith(
             caches.open(dynamicCache).then(function (cache) {
@@ -105,7 +105,7 @@ self.addEventListener('fetch', function (event) {
             })
         );
     }
-});
+}); */
 
 
 

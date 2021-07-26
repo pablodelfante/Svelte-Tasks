@@ -23,7 +23,7 @@ db.enablePersistence().catch(err => {
 })
 
 // INICIA SESIÓN ANÓNIMA EN FIREBASE
-firebase.auth().signInAnonymously()
+/* firebase.auth().signInAnonymously()
   .then(() => {
     // console.log('sign in')
   })
@@ -31,6 +31,6 @@ firebase.auth().signInAnonymously()
     var errorCode = error.code;
     var errorMessage = error.message;
     console.log('err on sign in')
-  });
+  }); */
 
 export default db;
