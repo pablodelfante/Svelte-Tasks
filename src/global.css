@@ -1,5 +1,6 @@
 body {
-    background-color: rgb(187, 153, 111);
+    /* background-color: rgb(187, 153, 111); */
+    @apply bg-yellow-700;
     font-family: "Lato", sans-serif;
 }
 
