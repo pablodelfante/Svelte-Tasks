@@ -4,7 +4,6 @@ const dynamicCache = 'dynamic-cache';
 const assets = [
     '/',
     '/index.html',
-    // '/js/index.js',
     '/fallback.html'
 ];
 
@@ -88,23 +87,26 @@ self.addEventListener('activate', e => {
 
 }) */
 
-
+let generalEvents = []
 
 // Si hay una versión en caché disponible, se usa, pero obtenga una actualización para la próxima vez.
 self.addEventListener('fetch', function (event) {
-    if ((event.request.url.indexOf('firestore.googleapis.com') === -1) && (event.request.method != 'POST')) {
-        event.respondWith(
-            caches.open(dynamicCache).then(function (cache) {
-                return cache.match(event.request).then(function (response) {
-                    var fetchPromise = fetch(event.request).then(function (networkResponse) {
-                        cache.put(event.request, networkResponse.clone());
-                        return networkResponse;
-                    }).catch(() => console.log('err to fetch new data'));
-                    return response || fetchPromise;
-                }).catch(() => caches.match('/fallback.html'))
-            })
-        );
-    }
+
+    generalEvents = [...generalEvents, event];
+    event.respondWith(
+        caches.open(dynamicCache).then(function (cache) {
+            return cache.match(event.request).then(function (response) {
+                return response || fetch(event.request);
+
+                /*  var fetchPromise = fetch(event.request).then(function (networkResponse) {
+                     cache.put(event.request, networkResponse.clone());
+                     return networkResponse;
+                 }).catch(() => console.log('err to fetch new data'));
+                 return response || fetchPromise; */
+            }).catch(() => caches.match('/fallback.html'))
+        })
+    );
+
 });
 
 
@@ -114,16 +116,27 @@ aquellas que ocurren con tanta regularidad que un mensaje
 push por actualización sería demasiado frecuente para los
 usuarios, como líneas de tiempo sociales o artículos de noticias. */
 
-/* self.addEventListener('sync', function (event) {
+self.addEventListener('sync', function (event) {
+    //console.log(generalEvents)
     if (event.tag == 'getDataSync') {
-        // event.waitUntil(
-            console.log('inside')
+        event.waitUntil(
 
-        var fetchPromise = fetch(event.request).then(function (networkResponse) {
-            cache.put(event.request, networkResponse.clone());
-            return networkResponse;
-        }).catch(() => console.log('err to fetch new data'));
-        console.log('logre guardar en background')
-        //   );
+
+            caches.open(dynamicCache).then(function (cache) {
+
+                generalEvents.forEach((elem, i) => {
+
+                    if ((elem.request.url.indexOf('firestore.googleapis.com') === -1) && (elem.request.method != 'POST')) {
+                        fetch(elem.request).then(function (networkResponse) {
+                            cache.put(elem.request, networkResponse.clone());
+                        }).catch(() => console.log('>>err to fetch data'));
+                    }
+                })
+                console.log('>>>sync on back')
+                generalEvents = [];
+            })
+
+
+        );
     }
-}); */
+});

@@ -28,7 +28,7 @@
 
         // Then later, request a one-off sync: dispara evento de sincronización para ser escuchado
         navigator.serviceWorker.ready.then(function (swRegistration) {
-            return swRegistration.sync.register("myFirstSync");
+            return swRegistration.sync.register("getDataSync");
         });
     </script>
 </svelte:head>
