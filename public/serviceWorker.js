@@ -91,7 +91,7 @@ self.addEventListener('activate', e => {
 
 
 // Si hay una versión en caché disponible, se usa, pero obtenga una actualización para la próxima vez.
-/* self.addEventListener('fetch', function (event) {
+self.addEventListener('fetch', function (event) {
     if ((event.request.url.indexOf('firestore.googleapis.com') === -1) && (event.request.method != 'POST')) {
         event.respondWith(
             caches.open(dynamicCache).then(function (cache) {
@@ -105,7 +105,7 @@ self.addEventListener('activate', e => {
             })
         );
     }
-}); */
+});
 
 
 
@@ -115,11 +115,15 @@ push por actualización sería demasiado frecuente para los
 usuarios, como líneas de tiempo sociales o artículos de noticias. */
 
 /* self.addEventListener('sync', function (event) {
-    if (event.id == 'update-leaderboard') {
-      event.waitUntil(
-        caches.open('mygame-dynamic').then(function (cache) {
-          return cache.add('/leaderboard.json');
-        }),
-      );
+    if (event.tag == 'getDataSync') {
+        // event.waitUntil(
+            console.log('inside')
+
+        var fetchPromise = fetch(event.request).then(function (networkResponse) {
+            cache.put(event.request, networkResponse.clone());
+            return networkResponse;
+        }).catch(() => console.log('err to fetch new data'));
+        console.log('logre guardar en background')
+        //   );
     }
-  }); */
+}); */
