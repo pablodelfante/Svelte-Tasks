@@ -1,5 +1,7 @@
 const staticCache = 'v1';
 const dynamicCache = 'dynamic-cache';
+let generalEvents = [];
+
 // assets to cache
 const assets = [
     '/',
@@ -7,7 +9,7 @@ const assets = [
     '/fallback.html'
 ];
 
-// ==================================
+// ========= Functions for limit cache ============
 const limitCacheSize = (name, size) => {
     // console.log('limit cache size')
     caches.open(name).then(cache => {
@@ -69,25 +71,6 @@ self.addEventListener('activate', e => {
 })
 
 
-// fetching data (esto estaba funcionando bien)
-/* self.addEventListener('fetch', e => {
-    if (e.request.url.indexOf('firestore.googleapis.com') === -1) {
-        e.respondWith(
-            caches.match(e.request).then(staticRes => {
-                return staticRes || fetch(e.request).then(dynamicRes => {
-                    return caches.open(dynamicCache).then(cache => {
-                        cache.put(e.request.url, dynamicRes.clone())
-                        limitCacheSize(dynamicCache, 20)
-                        return dynamicRes
-                    })
-                })
-            }).catch(() => caches.match('/fallback.html'))
-        )
-    }
-
-}) */
-
-let generalEvents = []
 
 // Si hay una versión en caché disponible, se usa, pero obtenga una actualización para la próxima vez.
 self.addEventListener('fetch', function (event) {
@@ -115,17 +98,11 @@ self.addEventListener('fetch', function (event) {
 aquellas que ocurren con tanta regularidad que un mensaje
 push por actualización sería demasiado frecuente para los
 usuarios, como líneas de tiempo sociales o artículos de noticias. */
-
 self.addEventListener('sync', function (event) {
-    //console.log(generalEvents)
     if (event.tag == 'getDataSync') {
         event.waitUntil(
-
-
             caches.open(dynamicCache).then(function (cache) {
-
                 generalEvents.forEach((elem, i) => {
-
                     if ((elem.request.url.indexOf('firestore.googleapis.com') === -1) && (elem.request.method != 'POST')) {
                         fetch(elem.request).then(function (networkResponse) {
                             cache.put(elem.request, networkResponse.clone());
@@ -135,8 +112,6 @@ self.addEventListener('sync', function (event) {
                 console.log('>>>sync on back')
                 generalEvents = [];
             })
-
-
         );
     }
 });
