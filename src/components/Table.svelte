@@ -1,9 +1,10 @@
 <script>
     import { fade } from "svelte/transition";
+    import { plants } from "./../helpers/stores";
 
     /* esto no es tan aconsejable en Svelte
     es mejor export let name = value */
-    const { plants, getDataForUpdate, deleteData } = $$props;
+    const { getDataForUpdate, deleteData } = $$props;
 </script>
 
 <!-- component -->
@@ -26,7 +27,7 @@
             </tr>
         </thead>
         <tbody class="text-gray-700">
-            {#each plants as plant}
+            {#each $plants as plant}
                 <tr class="bg-gray-100">
                     <td
                         data-id={plant._id}

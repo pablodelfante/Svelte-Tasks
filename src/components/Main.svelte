@@ -2,6 +2,7 @@
     import db from "./../helpers/db";
     import Button from "./Button.svelte";
     import Table from './Table.svelte';
+    import { plants } from "./../helpers/stores";
 
     // let plants = [];
     let name = "";
@@ -9,7 +10,7 @@
     let idToUpdate = "";
     let addButton = true;
 
-    const plants = [
+/*     let plants = [
     {
         "details": "La menta piperita es una planta medicinal digestiva, analgésica y antiséptica",
         "name": "Menta",
@@ -30,17 +31,17 @@
         "details": "La manzanilla es nativa de Europa, Oriente Próximo y la India y se utiliza para desórdenes digestivos o nerviosos",
         "_id": "busc7m4r7emqlf1WhZyg"
     }
-]
+] */
 
     // read data from firestore and get data of changes
- /*    db.collection("pwa-plants").onSnapshot(snapshot => {
-        plants = [];
+    db.collection("pwa-plants").onSnapshot(snapshot => {
+        $plants = [];
         snapshot.forEach(doc => {
             const newPlant = doc.data();
             newPlant._id = doc.id;
-            plants = [...plants, newPlant];
+            $plants = [...$plants, newPlant];
         });
-    }); */
+    });
 
     // write data on firestore
     const sendData = e => {
@@ -127,4 +128,4 @@
 
 
 <!-- component -->
-<Table {...{plants, getDataForUpdate, deleteData}}/>
+<Table {...{getDataForUpdate, deleteData}}/>
