@@ -5,6 +5,7 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
+    "deploy" : "firebase deploy --only hosting",
     "start": "sirv public --no-clear"
   },
   "devDependencies": {
